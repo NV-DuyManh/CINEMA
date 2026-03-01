@@ -20,16 +20,19 @@ namespace Cinema
 
         private void BtnPhim_Click(object sender, RoutedEventArgs e)
         {
+            // Nếu bạn đã tạo trang PagePhim.xaml rồi thì hãy xóa 2 dấu gạch chéo ở dưới nhé:
             //MainFrame.Navigate(new PagePhim());
         }
 
         private void BtnSanPham_Click(object sender, RoutedEventArgs e)
         {
-            //MainFrame.Navigate(new qlsp());
+            // ĐÃ MỞ KHÓA: Xóa 2 dấu gạch chéo // để lệnh chính thức hoạt động
+            MainFrame.Navigate(new qlsp());
         }
 
         private void BtnSuatChieu_Click(object sender, RoutedEventArgs e)
         {
+            // Tương tự, nếu có trang QLSuatChieu.xaml rồi thì mới mở khóa dòng dưới:
             //MainFrame.Navigate(new QLSuatChieu());
         }
 
