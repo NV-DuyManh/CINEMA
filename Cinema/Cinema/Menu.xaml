@@ -1,0 +1,137 @@
+﻿<Window x:Class="Cinema.Menu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Quản lý rạp phim"
+        Height="500" Width="900"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Background="#F4F7F6">
+
+    <Grid>
+        <Grid.Resources>
+            <DropShadowEffect x:Key="SoftShadow" BlurRadius="10" ShadowDepth="2" Direction="270" Color="#20000000" Opacity="0.4"/>
+            <DropShadowEffect x:Key="HoverShadow" BlurRadius="15" ShadowDepth="4" Direction="270" Color="#1ABC9C" Opacity="0.5"/>
+            <DropShadowEffect x:Key="LogoutHoverShadow" BlurRadius="15" ShadowDepth="4" Direction="270" Color="#E74C3C" Opacity="0.5"/>
+
+            <Style x:Key="SideMenuCard" TargetType="Button">
+                <Setter Property="Height" Value="55"/>
+                <Setter Property="Margin" Value="15,8"/>
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="Foreground" Value="#2C3E50"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="Padding" Value="15,0"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Effect" Value="{StaticResource SoftShadow}"/>
+
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="bd"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="10">
+                                <ContentPresenter
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left"
+                                    Margin="10,0"
+                                    TextElement.Foreground="{TemplateBinding Foreground}"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#1ABC9C"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Effect" Value="{StaticResource HoverShadow}"/>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background" Value="#16A085"/>
+                        <Setter Property="Foreground" Value="White"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="LogoutMenuCard" TargetType="Button" BasedOn="{StaticResource SideMenuCard}">
+                <Setter Property="Foreground" Value="#E74C3C"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#E74C3C"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Effect" Value="{StaticResource LogoutHoverShadow}"/>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background" Value="#C0392B"/>
+                        <Setter Property="Foreground" Value="White"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" CornerRadius="0,20,20,0">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                    <GradientStop Color="#1A252C" Offset="0.0"/>
+                    <GradientStop Color="#2C3E50" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Border.Background>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0">
+                    <TextBlock Text="🎬 QUẢN LÝ RẠP PHIM"
+                               Foreground="White"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Margin="20,25,20,20"
+                               TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               Cursor="Hand"
+                               MouseLeftButtonDown="TxtTieuDe_Click"
+                               ToolTip="Nhấn để về Trang chủ"/>
+
+                    <Button Style="{StaticResource SideMenuCard}"
+                            Content="🎬  Quản lý phim"
+                            Click="BtnPhim_Click"/>
+
+                    <Button Style="{StaticResource SideMenuCard}"
+                            Content="🍿  Quản lý sản phẩm"
+                            Click="BtnSanPham_Click"/>
+
+                    <Button Style="{StaticResource SideMenuCard}"
+                            Content="🕒  Quản lý suất chiếu"
+                            Click="BtnSuatChieu_Click"/>
+
+                    <Button Style="{StaticResource SideMenuCard}"
+                            Content="👤  Quản lý tài khoản"
+                            Click="BtnTaiKhoan_Click"/>
+                </StackPanel>
+
+                <Button Grid.Row="1"
+                        Style="{StaticResource LogoutMenuCard}"
+                        Content="🚪  Đăng xuất"
+                        Margin="15,8,15,25"
+                        Click="BtnDangXuat_Click"/>
+            </Grid>
+        </Border>
+
+        <Border Grid.Column="1"
+                Background="White"
+                Margin="15,15,15,15"
+                CornerRadius="12"
+                Effect="{StaticResource SoftShadow}">
+            <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Source="WelcomePage.xaml"/>
+        </Border>
+    </Grid>
+</Window>
