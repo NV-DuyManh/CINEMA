@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,7 +8,6 @@ using System.Windows.Media;
 
 namespace Cinema
 {
-    // --- LỚP CONVERTER TÍNH GIỜ KẾT THÚC ---
     public class EndTimeConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -38,7 +37,6 @@ namespace Cinema
         {
             try
             {
-                // Cấp dữ liệu cho form Thêm mới
                 cmb_Phim.ItemsSource = db.phims.ToList();
                 cmb_Phim.DisplayMemberPath = "ten_phim";
                 cmb_Phim.SelectedValuePath = "ma_phim";
@@ -48,7 +46,6 @@ namespace Cinema
                 cmb_Phong.DisplayMemberPath = "ten_phong";
                 cmb_Phong.SelectedValuePath = "ma_phong";
 
-                // Cấp dữ liệu cho phần Bộ Lọc
                 var dsLoc = dsPhong.ToList();
                 dsLoc.Insert(0, new phongchieu { ma_phong = 0, ten_phong = "Tất cả rạp" });
                 cmb_FilterPhong.ItemsSource = dsLoc;
@@ -68,12 +65,23 @@ namespace Cinema
 
             try
             {
+                // Tắt cảnh báo bảo trì ở màn hình chính trước khi lọc
+                if (bdr_MainBaoTriWarning != null) bdr_MainBaoTriWarning.Visibility = Visibility.Collapsed;
+
                 var query = db.lichchieux.AsQueryable();
 
                 if (cmb_FilterPhong.SelectedValue != null && (int)cmb_FilterPhong.SelectedValue > 0)
                 {
                     int maPhongChon = (int)cmb_FilterPhong.SelectedValue;
                     query = query.Where(x => x.ma_phong == maPhongChon);
+
+                    // Bật cảnh báo nếu rạp đang lọc bị Bảo Trì
+                    phongchieu rapDangLoc = cmb_FilterPhong.SelectedItem as phongchieu;
+                    if (rapDangLoc != null && rapDangLoc.tinh_trang == "BaoTri" && bdr_MainBaoTriWarning != null)
+                    {
+                        bdr_MainBaoTriWarning.Visibility = Visibility.Visible;
+                        txt_MainBaoTriText.Text = $"Rạp '{rapDangLoc.ten_phong}' hiện đang được bảo trì. Không thể thêm lịch chiếu mới tại đây!";
+                    }
                 }
 
                 if (dp_FilterNgay.SelectedDate.HasValue)
@@ -90,7 +98,7 @@ namespace Cinema
 
                 var ketQua = query.OrderBy(x => x.ngay_chieu).ThenBy(x => x.gio_bat_dau).ToList();
                 dtg_suat_chieu.ItemsSource = ketQua;
-                txt_ket_qua.Text = $"Hiển thị {ketQua.Count} suất chiếu.";
+                txt_ket_qua.Text = $"Hiển thị {ketQua.Count()} suất chiếu.";
             }
             catch (Exception) { }
         }
@@ -126,6 +134,7 @@ namespace Cinema
             ThucHienLoc();
         }
 
+        // Cảnh báo ở trong Form Thêm Mới
         private void Modal_Phong_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cmb_Phong.SelectedItem is phongchieu selectedPhong && txt_ThongBaoBaoTri != null)
@@ -136,13 +145,17 @@ namespace Cinema
 
         private void btn_hien_form_them_Click(object sender, RoutedEventArgs e)
         {
-            // Reset form trống trước khi hiện
             cmb_Phim.SelectedIndex = -1;
-            cmb_Phong.SelectedIndex = -1;
-            dp_NgayChieu.SelectedDate = null;
+
+            // Nếu người dùng đang lọc rạp nào, tự động điền rạp đó vào form thêm mới
+            if (cmb_FilterPhong.SelectedIndex > 0)
+                cmb_Phong.SelectedValue = cmb_FilterPhong.SelectedValue;
+            else
+                cmb_Phong.SelectedIndex = -1;
+
+            dp_NgayChieu.SelectedDate = dp_FilterNgay.SelectedDate; // Tự động lấy ngày đang lọc
             txt_GioChieu.Text = "";
             txt_GiaVe.Text = "";
-            txt_ThongBaoBaoTri.Visibility = Visibility.Collapsed;
 
             ModalOverlay.Visibility = Visibility.Visible;
         }
@@ -160,6 +173,14 @@ namespace Cinema
                     string.IsNullOrWhiteSpace(txt_GioChieu.Text) || string.IsNullOrWhiteSpace(txt_GiaVe.Text))
                 {
                     MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // CHỐT CHẶN: RẠP BẢO TRÌ THÌ KHÔNG CHO LƯU
+                phongchieu rapDuocChon = cmb_Phong.SelectedItem as phongchieu;
+                if (rapDuocChon != null && rapDuocChon.tinh_trang == "BaoTri")
+                {
+                    MessageBox.Show($"Không thể thêm lịch chiếu! Rạp '{rapDuocChon.ten_phong}' hiện đang trong thời gian bảo trì.", "Lỗi Logic", MessageBoxButton.OK, MessageBoxImage.Stop);
                     return;
                 }
 
