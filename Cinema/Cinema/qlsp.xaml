@@ -1,11 +1,14 @@
-﻿<Page x:Class="Cinema.qlsp"
+<Page x:Class="Cinema.qlsp"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:local="clr-namespace:Cinema"
       mc:Ignorable="d"
-      Title="Quản lý sản phẩm bắp nước - Cinema" Height="650" Width="1000" Background="#F0F2F5">
+      Title="Quản lý sản phẩm bắp nước - Cinema" 
+      d:DesignHeight="650" d:DesignWidth="1000" 
+      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+      Background="#F0F2F5">
 
     <Page.Resources>
         <Style x:Key="LabelStyle" TargetType="TextBlock">
