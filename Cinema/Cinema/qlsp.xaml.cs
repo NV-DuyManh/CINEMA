@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -68,12 +68,22 @@ namespace Cinema
 
             try
             {
+                string tenMoi = txtName.Text.Trim();
+
+                // KIỂM TRA TRÙNG TÊN SẢN PHẨM
+                var spTonTai = db.sanphams.FirstOrDefault(s => s.ten_san_pham.ToLower() == tenMoi.ToLower());
+                if (spTonTai != null)
+                {
+                    MessageBox.Show("Tên sản phẩm này đã tồn tại! Vui lòng nhập tên khác.", "Thông báo");
+                    return;
+                }
+
                 string uiLoai = (cmbCategory.SelectedItem as ComboBoxItem)?.Content.ToString();
                 string uiTrangThai = (cmbStatus.SelectedItem as ComboBoxItem)?.Content.ToString();
 
                 var spMoi = new sanpham()
                 {
-                    ten_san_pham = txtName.Text,
+                    ten_san_pham = tenMoi,
                     gia_ban = decimal.Parse(txtPrice.Text),
                     so_luong_ton = string.IsNullOrWhiteSpace(txtQuantity.Text) ? 0 : int.Parse(txtQuantity.Text),
                     loai = GetLoaiSQL(uiLoai),
@@ -122,14 +132,42 @@ namespace Cinema
                 var spSua = db.sanphams.FirstOrDefault(s => s.ma_san_pham == maSP);
                 if (spSua != null)
                 {
-                    string uiLoai = (cmbCategory.SelectedItem as ComboBoxItem)?.Content.ToString();
-                    string uiTrangThai = (cmbStatus.SelectedItem as ComboBoxItem)?.Content.ToString();
+                    // Lấy dữ liệu mới từ giao diện
+                    string tenMoi = txtName.Text.Trim();
+                    decimal giaMoi = decimal.Parse(txtPrice.Text);
+                    int soLuongMoi = string.IsNullOrWhiteSpace(txtQuantity.Text) ? 0 : int.Parse(txtQuantity.Text);
 
-                    spSua.ten_san_pham = txtName.Text;
-                    spSua.gia_ban = decimal.Parse(txtPrice.Text);
-                    spSua.so_luong_ton = string.IsNullOrWhiteSpace(txtQuantity.Text) ? 0 : int.Parse(txtQuantity.Text);
-                    spSua.loai = GetLoaiSQL(uiLoai);
-                    spSua.trang_thai = GetTrangThaiSQL(uiTrangThai);
+                    string uiLoai = (cmbCategory.SelectedItem as ComboBoxItem)?.Content.ToString();
+                    string loaiMoi = GetLoaiSQL(uiLoai);
+
+                    string uiTrangThai = (cmbStatus.SelectedItem as ComboBoxItem)?.Content.ToString();
+                    string trangThaiMoi = GetTrangThaiSQL(uiTrangThai);
+
+                    // KIỂM TRA XEM CÓ THAY ĐỔI GÌ KHÔNG
+                    if (spSua.ten_san_pham == tenMoi &&
+                        spSua.gia_ban == giaMoi &&
+                        spSua.so_luong_ton == soLuongMoi &&
+                        spSua.loai == loaiMoi &&
+                        spSua.trang_thai == trangThaiMoi)
+                    {
+                        MessageBox.Show("Bạn chưa thay đổi thông tin nào cả!", "Thông báo");
+                        return; // Dừng lại, không chạy code bên dưới nữa
+                    }
+
+                    // KIỂM TRA TRÙNG TÊN KHI CẬP NHẬT (bỏ qua tên của chính nó)
+                    var spTonTai = db.sanphams.FirstOrDefault(s => s.ten_san_pham.ToLower() == tenMoi.ToLower() && s.ma_san_pham != maSP);
+                    if (spTonTai != null)
+                    {
+                        MessageBox.Show("Tên sản phẩm này đã tồn tại! Vui lòng nhập tên khác.", "Thông báo");
+                        return;
+                    }
+
+                    // Cập nhật dữ liệu mới
+                    spSua.ten_san_pham = tenMoi;
+                    spSua.gia_ban = giaMoi;
+                    spSua.so_luong_ton = soLuongMoi;
+                    spSua.loai = loaiMoi;
+                    spSua.trang_thai = trangThaiMoi;
 
                     db.SaveChanges();
                     LoadDuLieu();
