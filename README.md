@@ -18,7 +18,7 @@
 | Dang Dai Viet       | 29211155820 |
 
 ---
-## Role-Based Access
+## 🔐 Role-Based Access
 
 The system integrates a smart role-based access control feature, automatically adapting the user interface based on the logged-in account's role:
 
@@ -80,7 +80,7 @@ Cinema/bin/Debug/DBRapPhim.mdf
 Press **F5** in Visual Studio to start the program.
 
 ---
-## Demo Interface
+## 💻 Demo Interface
 <img width="1779" height="1083" alt="image" src="https://github.com/user-attachments/assets/2b6b8fc6-bcd1-4266-86f4-32d916477ef8" />
 <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/3612b601-55e6-406f-a902-564288718d8e" />
 <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/fe19ac97-4279-406c-95c8-6e2446e0a584" />
