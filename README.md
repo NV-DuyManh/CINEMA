@@ -78,6 +78,7 @@ Cinema/bin/Debug/DBRapPhim.mdf
 ## ▶ Run Application
 
 Press **F5** in Visual Studio to start the program.
+
 ---
 ## Demo Interface
 <img width="1779" height="1083" alt="image" src="https://github.com/user-attachments/assets/2b6b8fc6-bcd1-4266-86f4-32d916477ef8" />
