@@ -79,8 +79,5 @@ Cinema/bin/Debug/DBRapPhim.mdf
 Press **F5** in Visual Studio to start the program.
 
 ---
-
-## 📂 Repository
-
 GitHub:
 https://github.com/NV-DuyManh/CINEMA_GROUP6
