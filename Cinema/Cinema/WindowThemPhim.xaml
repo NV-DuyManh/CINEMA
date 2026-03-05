@@ -102,10 +102,12 @@
                 <StackPanel Grid.Column="2">
 
                     <TextBlock Text="Ngày khởi chiếu"/>
-                    <DatePicker x:Name="dpNgayKhoiChieu"/>
+                    <DatePicker x:Name="dpNgayKhoiChieu"
+                    SelectedDateChanged="dpNgayKhoiChieu_SelectedDateChanged"/>
 
                     <TextBlock Text="Ngày kết thúc"/>
-                    <DatePicker x:Name="dpNgayKetThuc"/>
+                    <DatePicker x:Name="dpNgayKetThuc"
+                    SelectedDateChanged="dpNgayKhoiChieu_SelectedDateChanged"/>
 
                     <TextBlock Text="Số lượng người nhập"/>
                     <TextBox x:Name="txtNguoiNhap"/>
